@@ -115,20 +115,6 @@
         }
       },
       "spec": {
-        "strategy": {
-          "type": "Recreate",
-          "recreateParams": {
-            "post": {
-              "failurePolicy": "Abort",
-              "execNewPod": {
-                "command": [
-                  "./run.sh"
-                ],
-                "containerName": "dancer-example"
-              }
-            }
-          }
-        },
         "triggers": [
           {
             "type": "ImageChange",
@@ -322,7 +308,7 @@
     {
       "name": "MYSQL_DATABASE",
       "description": "database name",
-      "value": "root"
+      "value": "sampledb"
     },
     {
       "name": "SECRET_KEY_BASE",
