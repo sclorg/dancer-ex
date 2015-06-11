@@ -1,0 +1,27 @@
+Welcome to Dancer 2 on OpenShift V3!  It is currently [% timestamp %]
+<br>
+<br>
+<form action="/" method="post">
+Name: 
+<input type="text" name="name">
+<br>
+Email:
+<input type="text" name="email">
+<br>
+<input type="submit" value="Submit">
+</form>
+<br>
+<table>
+  <tr>
+    <th>id</th>
+    <th>name</th>
+    <th>email</th>
+  </tr>
+  [% FOREACH id IN data.keys.nsort %]
+  <tr>
+    <td>[% data.$id.id %]</td>
+    <td>[% data.$id.name %]</td>
+    <td>[% data.$id.email %]</td>
+  </tr>
+  [% END %]
+</table>
