@@ -4,17 +4,23 @@
   "metadata": {
     "name": "dancer-mysql-example",
     "annotations": {
-      "description": "A simple Perl with Dancer user registration application (with MySQL).",
-      "iconClass": "icon-perl",
-      "tags": "instant-app,perl,mysql,dancer"
+      "description": "An example Dancer application with a MySQL database",
+      "tags": "instant-app,perl,dancer,mysql",
+      "iconClass": "icon-perl"
     }
+  },
+  "labels": {
+    "template": "dancer-mysql-example"
   },
   "objects": [
     {
       "kind": "Service",
       "apiVersion": "v1",
       "metadata": {
-        "name": "frontend"
+        "name": "dancer-frontend",
+        "annotations": {
+          "description": "Exposes and load balances the application pods"
+        }
       },
       "spec": {
         "ports": [
@@ -25,7 +31,7 @@
           }
         ],
         "selector": {
-          "name": "frontend"
+          "name": "dancer-frontend"
         }
       }
     },
@@ -33,89 +39,80 @@
       "kind": "Route",
       "apiVersion": "v1",
       "metadata": {
-          "name": "${FRONTEND_ROUTE}"
+        "name": "dancer-route"
       },
       "spec": {
-          "host" : "${FRONTEND_ROUTE}",
-          "to": {
-              "kind" : "Service",
-              "name" : "frontend"
-          }
+        "host": "${FRONTEND_ROUTE}",
+        "to": {
+          "kind": "Service",
+          "name": "dancer-frontend"
+        }
       }
     },
     {
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "origin-dancer-app"
-      }
-    },
-    {
-      "kind": "ImageStream",
-      "apiVersion": "v1",
-      "metadata": {
-        "name": "perl-516-centos7"
-      },
-      "spec": {
-        "dockerImageRepository": "openshift/perl-516-centos7"
+        "name": "dancer-example",
+        "annotations": {
+          "description": "Keeps track of changes in the application image"
+        }
       }
     },
     {
       "kind": "BuildConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "dancer-app",
-        "labels": {
-          "name": "dancer-app"
+        "name": "dancer-example",
+        "annotations": {
+          "description": "Defines how to build the application"
         }
       },
       "spec": {
-        "triggers": [
-          {
-            "type": "GitHub",
-            "github": {
-              "secret": "secret101"
-            }
-          },
-          {
-            "type": "Generic",
-            "generic": {
-              "secret": "secret101"
-            }
-          },
-          {
-            "type": "ImageChange"
-          }
-        ],
         "source": {
           "type": "Git",
           "git": {
-            "uri": "${GITHUB_URL}"
-          }
+            "uri": "${SOURCE_REPOSITORY_URL}"
+          },
+          "contextDir": "${CONTEXT_DIR}"
         },
         "strategy": {
           "type": "Source",
           "sourceStrategy": {
             "from": {
-              "kind": "DockerImage",
-              "name": "openshift/perl-516-centos7:latest"
-            },
-            "incremental": true
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "perl:5.16"
+            }
           }
         },
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "origin-dancer-app:latest"
+            "name": "dancer-example:latest"
           }
-        }
+        },
+        "triggers": [
+          {
+            "type": "ImageChange"
+          },
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "${GITHUB_WEBHOOK_SECRET}"
+            }
+          }
+        ]
       }
     },
     {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "frontend"
+        "name": "dancer-frontend",
+        "annotations": {
+          "description": "Defines how to deploy the application server"
+        }
       },
       "spec": {
         "strategy": {
@@ -127,7 +124,7 @@
                 "command": [
                   "./run.sh"
                 ],
-                "containerName": "dancer-app"
+                "containerName": "dancer-example"
               }
             }
           }
@@ -138,29 +135,34 @@
             "imageChangeParams": {
               "automatic": true,
               "containerNames": [
-                "dancer-app"
+                "dancer-example"
               ],
               "from": {
-                "name": "origin-dancer-app:latest"
+                "kind": "ImageStreamTag",
+                "name": "dancer-example:latest"
               }
             }
+          },
+          {
+            "type": "ConfigChange"
           }
         ],
         "replicas": 1,
         "selector": {
-          "name": "frontend"
+          "name": "dancer-frontend"
         },
         "template": {
           "metadata": {
+            "name": "dancer-frontend",
             "labels": {
-              "name": "frontend"
+              "name": "dancer-frontend"
             }
           },
           "spec": {
             "containers": [
               {
-                "name": "dancer-app",
-                "image": "origin-dancer-app",
+                "name": "dancer-example",
+                "image": "dancer-example",
                 "ports": [
                   {
                     "containerPort": 8080
@@ -194,12 +196,15 @@
       "kind": "Service",
       "apiVersion": "v1",
       "metadata": {
-        "name": "database"
+        "name": "database",
+        "annotations": {
+          "description": "Exposes the database server"
+        }
       },
       "spec": {
         "ports": [
           {
-            "name": "db",
+            "name": "mysql",
             "port": 3306,
             "targetPort": 3306
           }
@@ -213,7 +218,10 @@
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "database"
+        "name": "database",
+        "annotations": {
+          "description": "Defines how to deploy the database"
+        }
       },
       "spec": {
         "strategy": {
@@ -230,6 +238,7 @@
         },
         "template": {
           "metadata": {
+            "name": "database",
             "labels": {
               "name": "database"
             }
@@ -237,7 +246,7 @@
           "spec": {
             "containers": [
               {
-                "name": "dancer-app-database",
+                "name": "mysql",
                 "image": "openshift/mysql-55-centos7",
                 "ports": [
                   {
@@ -267,9 +276,24 @@
   ],
   "parameters": [
     {
-      "name": "GITHUB_URL",
-      "description": "GitHub URL",
-      "value": "git://github.com/ewolinetz/perl-ex.git"
+      "name": "SOURCE_REPOSITORY_URL",
+      "description": "The URL of the repository with your application source code",
+      "value": "https://github.com/openshift/dancer-ex.git"
+    },
+    {
+      "name": "CONTEXT_DIR",
+      "description": "Set this to the relative path to your project if it is not in the root of your repository"
+    },
+    {
+      "name": "FRONTEND_ROUTE",
+      "description": "The exposed hostname that will route to the Dancer service",
+      "value": "dancer.app"
+    },
+    {
+      "name": "GITHUB_WEBHOOK_SECRET",
+      "description": "A secret string used to configure the GitHub webhook",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{40}"
     },
     {
       "name": "ADMIN_USERNAME",
@@ -302,17 +326,9 @@
     },
     {
       "name": "SECRET_KEY_BASE",
-      "description": "production secret key base",
+      "description": "Your secret key for verifying the integrity of signed cookies",
       "generate": "expression",
       "from": "[a-z0-9]{127}"
-    },
-    {
-      "name": "FRONTEND_ROUTE",
-      "description": "The exposed hostname that will route Dancer frontend service",
-      "value": "dancer-mysql-frontend.apps"
     }
-  ],
-  "labels": {
-    "template": "dancer-mysql-example"
-  }
+  ]
 }
