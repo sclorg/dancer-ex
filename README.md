@@ -22,9 +22,12 @@ OpenShift stores these generated values in configuration files that only exist f
 TLDR: OpenShift can generate and expose environment variables to our application automatically. Look at this quickstart for an example.
 
 ###Development mode
-When you develop your Dancer application in OpenShift, you can also enable the 'development' environment by setting the environment variable [TODO].
+When you develop your Dancer application in OpenShift, you can also enable the 'development' environment by updating the value in <code>index.pl</code> like so <code>set environment => 'development';</code>.
 
 Development environment can help you debug problems in your application in the same way as you do when developing on your local machine. However, we strongly advise you to not run your application in this mode in production.
+
+###Additional configurations
+The Perl container is set up so that Apache will load additionally provided .conf files located within the <code>cfg</code> directory of the application's root.  This is useful if you are configuring your application with a database backend and would want to pass through your environment variables to mod_perl with <code>PerlPassEnv</code>.
 
 ###Manual Installation: 
 1. Create an account at [https://www.openshift.com](https://www.openshift.com)  
@@ -33,13 +36,13 @@ Development environment can help you debug problems in your application in the s
 3. Clone your repository to your OpenShift server
 3. Update the GitHub repository url in the instant app configuration to match your forked url 
 2. Add a Perl application from the provided template
-`osc process -f openshift/templates/dancer.json | create -f - `
+`oc process -f openshift/templates/dancer.json | oc create -f - `
 3. Start the build  
-`osc start-build dancer-app`
+`oc start-build dancer-app`
 4. Watch your build progress  
-`osc build-logs -f dancer-app-1`
+`oc build-logs -f dancer-app-1`
 5. Wait for frontend pods to start up (this can take a few minutes):  
-`osc get pods`  
+`oc get pods`  
 Sample output:  
 >POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
 dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
@@ -49,7 +52,7 @@ frontend-1-w6cef     172.17.0.50                                                
 
 
 6. Check the IP and port the frontend service is running on:  
-`osc get services`  
+`oc get services`  
 Sample output:  
 >NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
 frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
@@ -64,13 +67,13 @@ In this case, the IP for frontend is 172.30.223.197 and it is on port 8080.
 3. Clone your repository to your OpenShift server
 3. Update the GitHub repository url in the instant app configuration to match your forked url 
 2. Add a Perl application from the dancer-mysql template
-`osc process -f openshift/templates/dancer-mysql.json | create -f - `
+`oc process -f openshift/templates/dancer-mysql.json | oc create -f - `
 3. Start the build  
-`osc start-build dancer-app`
+`oc start-build dancer-app`
 4. Watch your build progress  
-`osc build-logs -f dancer-app-1`  
+`oc build-logs -f dancer-app-1`  
 5. Wait for frontend and database pods to be started (this can take a few minutes):  
-`osc get pods`  
+`oc get pods`  
 Sample output:  
 >POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
 dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
@@ -81,7 +84,7 @@ mysql-1-4edf0        172.17.0.45                                                
                                    mysql          openshift/mysql-55-centos7:latest                                                                                                                                                                                                                        Running      3 minutes  
 
 6. Check the IP and port the frontend service is running on:  
-`osc get services`  
+`oc get services`  
 Sample output:  
 >NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
 frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
