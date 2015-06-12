@@ -10,7 +10,10 @@ set layout => undef;
 set views => File::Spec->rel2abs('./views');
 
 sub get_connection{
-  my $dbh=DBI->connect("DBI:mysql:database=$ENV{'MYSQL_DATABASE'};host=$ENV{'DATABASE_SERVICE_HOST'};port=$ENV{'DATABASE_SERVICE_PORT'}",$ENV{'MYSQL_USER'},$ENV{'MYSQL_PASSWORD'}, { RaiseError => 1 } ) or die ("Couldn't connect to database: " . DBI->errstr );
+  my $service_name=uc $ENV{'DATABASE_SERVICE_NAME'};
+  my $db_host=$ENV{"${service_name}_SERVICE_HOST"};
+  my $db_port=$ENV{"${service_name}_SERVICE_PORT"};
+  my $dbh=DBI->connect("DBI:mysql:database=$ENV{'MYSQL_DATABASE'};host=$db_host;port=$db_port",$ENV{'MYSQL_USER'},$ENV{'MYSQL_PASSWORD'}, { RaiseError => 1 } ) or die ("Couldn't connect to database: " . DBI->errstr );
   return $dbh;
 }
 

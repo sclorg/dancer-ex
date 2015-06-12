@@ -156,6 +156,10 @@
                 ],
                 "env": [
                   {
+                    "name": "DATABASE_SERVICE_NAME",
+                    "value": "${DATABASE_SERVICE_NAME}"
+                  },
+                  {
                     "name": "MYSQL_USER",
                     "value": "${MYSQL_USER}"
                   },
@@ -182,7 +186,7 @@
       "kind": "Service",
       "apiVersion": "v1",
       "metadata": {
-        "name": "database",
+        "name": "${DATABASE_SERVICE_NAME}",
         "annotations": {
           "description": "Exposes the database server"
         }
@@ -196,7 +200,7 @@
           }
         ],
         "selector": {
-          "name": "database"
+          "name": "${DATABASE_SERVICE_NAME}"
         }
       }
     },
@@ -204,7 +208,7 @@
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "database",
+        "name": "${DATABASE_SERVICE_NAME}",
         "annotations": {
           "description": "Defines how to deploy the database"
         }
@@ -220,13 +224,13 @@
         ],
         "replicas": 1,
         "selector": {
-          "name": "database"
+          "name": "${DATABASE_SERVICE_NAME}"
         },
         "template": {
           "metadata": {
-            "name": "database",
+            "name": "${DATABASE_SERVICE_NAME}",
             "labels": {
-              "name": "database"
+              "name": "${DATABASE_SERVICE_NAME}"
             }
           },
           "spec": {
@@ -292,6 +296,11 @@
       "description": "administrator password",
       "generate": "expression",
       "from": "[a-zA-Z0-9]{8}"
+    },
+    {
+      "name": "DATABASE_SERVICE_NAME",
+      "description": "Database service name",
+      "value": "database"
     },
     {
       "name": "MYSQL_USER",
