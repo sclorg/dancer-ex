@@ -42,7 +42,7 @@
         "name": "dancer-route"
       },
       "spec": {
-        "host": "${FRONTEND_ROUTE}",
+        "host": "${APPLICATION_DOMAIN}",
         "to": {
           "kind": "Service",
           "name": "dancer-frontend"
@@ -276,9 +276,9 @@
       "description": "Set this to the relative path to your project if it is not in the root of your repository"
     },
     {
-      "name": "FRONTEND_ROUTE",
+      "name": "APPLICATION_DOMAIN",
       "description": "The exposed hostname that will route to the Dancer service",
-      "value": "dancer.app"
+      "value": "dancer-example.openshiftapps.com"
     },
     {
       "name": "GITHUB_WEBHOOK_SECRET",
