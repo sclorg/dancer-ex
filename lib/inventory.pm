@@ -76,4 +76,9 @@ post '/' => sub {
    template index => {data => $data, timestamp => $timestamp};
 };
 
+get '/_health/live' => sub {
+
+    template live => {};
+};
+
 true;
