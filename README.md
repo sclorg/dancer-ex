@@ -30,65 +30,80 @@ Development environment can help you debug problems in your application in the s
 The Perl container is set up so that Apache will load additionally provided .conf files located within the <code>cfg</code> directory of the application's root.  This is useful if you are configuring your application with a database backend and would want to pass through your environment variables to mod_perl with <code>PerlPassEnv</code>.
 
 ###Manual Installation: 
-1. Create an account at [https://www.openshift.com](https://www.openshift.com)  
-*NOTE*: OpenShift Online currently is using V2.
+1. Create an account at [https://www.openshiftapps.com](https://www.openshiftapps.com)  
 2. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
 3. Clone your repository to your OpenShift server
 3. Update the GitHub repository url in the instant app configuration to match your forked url 
 2. Add a Perl application from the provided template
-`oc process -f openshift/templates/dancer.json | oc create -f - `
-3. Start the build  
-`oc start-build dancer-app`
+
+		$ oc process -f openshift/templates/dancer.json | oc create -f - 
+
 4. Watch your build progress  
-`oc build-logs -f dancer-app-1`
+
+		$ oc build-logs dancer-app-1
+
 5. Wait for frontend pods to start up (this can take a few minutes):  
-`oc get pods`  
-Sample output:  
->POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
-dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
-                                   sti-build      openshift/origin-sti-builder:v0.5.3                                                                                                                                                                                                                      Terminated   15 minutes   exit code 0
-frontend-1-w6cef     172.17.0.50                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=frontend-1,deploymentconfig=frontend,name=frontend                       Running      3 minutes    
-                                   dancer-app     172.30.221.178:5000/demo/origin-dancer-app@sha256:dd8452a64d8cf9ba36a461603306ae440b289f819c77dae1989c8980f3243f8e                                                                                                                                       Running      3 minutes    
+
+		$ oc get pods
+
+
+	Sample output:  
+
+		POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
+		dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
+           			                      sti-build      openshift/origin-sti-builder:v0.5.3                                                                                                                                                                                                                      Terminated   15 minutes   exit code 0
+		frontend-1-w6cef     172.17.0.50                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=frontend-1,deploymentconfig=frontend,name=frontend                       Running      3 minutes    
+               			                  dancer-app     172.30.221.178:5000/demo/origin-dancer-app@sha256:dd8452a64d8cf9ba36a461603306ae440b289f819c77dae1989c8980f3243f8e                                                                                                                                       Running      3 minutes    
 
 
 6. Check the IP and port the frontend service is running on:  
-`oc get services`  
-Sample output:  
->NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
-frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
+
+		$ oc get services
+
+	Sample output:  
+
+		NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
+		frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
 
 In this case, the IP for frontend is 172.30.223.197 and it is on port 8080.  
 *Note*: you can also get this information from the web console.
 
 ###Manual Installation: With MySQL
-1. Create an account at [https://www.openshift.com](https://www.openshift.com)  
-*NOTE*: OpenShift Online currently is using V2.
+1. Create an account at [https://www.openshiftapps.com](https://www.openshiftapps.com)  
 2. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
 3. Clone your repository to your OpenShift server
 3. Update the GitHub repository url in the instant app configuration to match your forked url 
 2. Add a Perl application from the dancer-mysql template
-`oc process -f openshift/templates/dancer-mysql.json | oc create -f - `
-3. Start the build  
-`oc start-build dancer-app`
+
+		$ oc process -f openshift/templates/dancer-mysql.json | oc create -f - 
+
 4. Watch your build progress  
-`oc build-logs -f dancer-app-1`  
+
+		$ oc build-logs dancer-app-1
+
 5. Wait for frontend and database pods to be started (this can take a few minutes):  
-`oc get pods`  
-Sample output:  
->POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
-dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
-                                   sti-build      openshift/origin-sti-builder:v0.5.3                                                                                                                                                                                                                      Terminated   15 minutes   exit code 0
-frontend-1-w6cef     172.17.0.50                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=frontend-1,deploymentconfig=frontend,name=frontend                       Running      3 minutes    
-                                   dancer-app     172.30.221.178:5000/demo/origin-dancer-app@sha256:dd8452a64d8cf9ba36a461603306ae440b289f819c77dae1989c8980f3243f8e                                                                                                                                       Running      3 minutes    
-mysql-1-4edf0        172.17.0.45                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=mysql-1,deploymentconfig=mysql,name=mysql                                Running      3 minutes   
-                                   mysql          openshift/mysql-55-centos7:latest                                                                                                                                                                                                                        Running      3 minutes  
+
+		$ oc get pods
+
+	Sample output:  
+
+		POD                  IP            CONTAINER(S)   IMAGE(S)                                                                                                             HOST                                            LABELS                                                                              STATUS       CREATED      MESSAGE
+		dancer-app-1-build                                                                                                                                                     ip-10-230-142-143.ec2.internal/10.230.142.143   build=dancer-app-1,buildconfig=dancer-app,name=dancer-app,template=dancer-example   Succeeded    15 minutes   
+   			                               sti-build      openshift/origin-sti-builder:v0.5.3                                                                                                                                                                                                                      Terminated   15 minutes   exit code 0
+		frontend-1-w6cef     172.17.0.50                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=frontend-1,deploymentconfig=frontend,name=frontend                       Running      3 minutes    
+		                                   dancer-app     172.30.221.178:5000/demo/origin-dancer-app@sha256:dd8452a64d8cf9ba36a461603306ae440b289f819c77dae1989c8980f3243f8e                                                                                                                                       Running      3 minutes    
+		mysql-1-4edf0        172.17.0.45                                                                                                                                       ip-10-230-142-143.ec2.internal/10.230.142.143   deployment=mysql-1,deploymentconfig=mysql,name=mysql                                Running      3 minutes   
+                		                   mysql          openshift/mysql-55-centos7:latest                                                                                                                                                                                                                        Running      3 minutes  
 
 6. Check the IP and port the frontend service is running on:  
-`oc get services`  
-Sample output:  
->NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
-frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
-mysql      template=mysql-template   name=mysql      172.30.139.179   3306/TCP
+
+		$ oc get services
+
+	Sample output:  
+
+		NAME       LABELS                    SELECTOR        IP(S)            PORT(S)
+		frontend   template=dancer-example   name=frontend   172.30.223.197   8080/TCP
+		mysql      template=mysql-template   name=mysql      172.30.139.179   3306/TCP
   
 In this case, the IP for frontend is 172.30.223.197 and it is on port 8080.  
 *Note*: you can also get this information from the web console.
