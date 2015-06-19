@@ -5,7 +5,7 @@ This is a quickstart Dancer application for OpenShift v3 that you can use as a s
 
 If you'd like to install it, follow [these directions](https://github.com/openshift/rails-ex/blob/master/README.md#installation).  
 
-The steps in this assume that you have access to an OpenShift deployment; you must have an OpenShift deployment that you have access to in order to deploy this app.
+The steps in this document assume that you have access to an OpenShift deployment that you can deploy applications on.
 
 OpenShift Considerations
 ------------------------
@@ -16,7 +16,7 @@ Since these quickstarts are shared code, we had to take special consideration to
 
 OpenShift stores these generated values in configuration files that only exist for your deployed application and not in your code anywhere. Each of them will be unique so initialize_secret(:a) will differ from initialize_secret(:b) but they will also be consistent, so any time your application uses them (even across reboots), you know they will be the same.
 
-TLDR: OpenShift can generate and expose environment variables to our application automatically. Look at this quickstart for an example.
+TLDR: OpenShift can generate and expose environment variables to your application automatically. Look at this quickstart for an example.
 
 ###Development mode
 When you develop your Dancer application in OpenShift, you can also enable the 'development' environment by updating the value in <code>index.pl</code> like so <code>set environment => 'development';</code>.
@@ -86,6 +86,24 @@ Since OpenShift V3 does not provide a git repository out of the box, you can con
 4. Navigate to your repository on GitHub and click on repository settings > webhooks  
 5. Paste your copied webhook url provided by OpenShift - Thats it!  
 6. After you save your webhook, if you refresh your settings page you can see the status of the ping that Github sent to OpenShift to verify it can reach the server.  
+
+###Enabling the Database sample
+To add REST and DB connectivity to this sample app, you can up date the application to launch using the code made available via this repository.  Edit 'bin/app.psgi' to look like the following:
+
+	#!/usr/bin/env perl
+	use strict;
+	use warnings;
+	use FindBin;
+	use lib "$FindBin::Bin/../lib";
+	use Dancer2;
+	use inventory;
+	#use default;
+
+	inventory->to_app;
+	#default->to_app;
+	start;
+
+You will then need to rebuild the application.
 
 ###License
 This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
