@@ -30,7 +30,7 @@ The Perl container is set up so that Apache will load .conf files located within
 These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](http://docs.openshift.org/latest/admin_guide/install/first_steps.html)
 
 1. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
-2. Clone your repository to your development machine
+2. Clone your repository to your development machine and cd to the repository directory
 3. Add a Perl application from the provided template and specify the source url to be your forked repo  
 
 		$ oc process -f openshift/templates/dancer.json -v SOURCE_REPOSITORY_URL=<your repository location> | oc create -f - 
