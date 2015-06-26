@@ -33,7 +33,7 @@ These steps assume your OpenShift deployment has the default set of ImageStreams
 2. Clone your repository to your development machine and cd to the repository directory
 3. Add a Perl application from the provided template and specify the source url to be your forked repo  
 
-		$ oc process -f openshift/templates/dancer.json -v SOURCE_REPOSITORY_URL=<your repository location> | oc create -f - 
+		$ oc new-app openshift/templates/dancer.json -p SOURCE_REPOSITORY_URL=<your repository location>
 
 4. Watch your build progress  
 
