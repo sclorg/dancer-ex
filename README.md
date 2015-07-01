@@ -27,7 +27,7 @@ Development environment can help you debug problems in your application in the s
 The Perl container is set up so that Apache will load .conf files located within the <code>cfg</code> directory of the application's root.  This is useful if you are configuring your application with a database backend and would want to pass through your environment variables to mod_perl with <code>PerlPassEnv</code>.
 
 ###Installation: 
-These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](http://docs.openshift.org/latest/admin_guide/install/first_steps.html)
+These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](http://docs.openshift.org/latest/admin_guide/install/first_steps.html).    If you are defining the set of ImageStreams now, remember to pass in the proper cluster-admin credentials and to create the ImageStreams in the 'openshift' namespace.
 
 1. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
 2. Clone your repository to your development machine and cd to the repository directory
@@ -35,11 +35,15 @@ These steps assume your OpenShift deployment has the default set of ImageStreams
 
 		$ oc new-app openshift/templates/dancer.json -p SOURCE_REPOSITORY_URL=<your repository location>
 
-4. Watch your build progress  
+4. Depending on the state of your system, and whether additional items need to be downloaded, it may take around a minute for your build to be started automatically.  If you do not want to wait, run
+
+		$ oc start-build dancer-example
+
+5. Once the build is running, watch your build progress  
 
 		$ oc build-logs dancer-example-1
 
-5. Wait for frontend pods to start up (this can take a few minutes):  
+6. Wait for dancer-example pods to start up (this can take a few minutes):  
 
 		$ oc get pods -w
 
@@ -47,26 +51,20 @@ These steps assume your OpenShift deployment has the default set of ImageStreams
 	Sample output:  
 
 		NAME                       READY     REASON    RESTARTS   AGE
-		dancer-example-1-build     1/1       Running   0          4m
-		dancer-frontend-1-deploy   1/1       Running   0          4s
-		dancer-frontend-1-votfl    0/1       Pending   0          1s
-		NAME                     READY     REASON       RESTARTS   AGE
-		dancer-example-1-build   0/1       ExitCode:0   0          4m
-		dancer-frontend-1-votfl   0/1       Running   0         6s
-		dancer-frontend-1-deploy   0/1       ExitCode:0   0         14s
-		dancer-frontend-1-votfl   1/1       Running   0         12s    
+		dancer-example-1-9d9vh    1/1       Running        0          41s
+		dancer-example-1-build    0/1       ExitCode:0     0          4m
 
 
-6. Check the IP and port the frontend service is running on:  
+6. Check the IP and port the dancer-example service is running on:  
 
 		$ oc get svc
 
 	Sample output:  
 
 		NAME              LABELS                          SELECTOR               IP(S)            PORT(S)
-		dancer-frontend   template=dancer-mysql-example   name=dancer-frontend   172.30.174.142   8080/TCP
+		dancer-example    template=dancer-example    name=dancer-example    172.30.225.109   8080/TCP
 
-In this case, the IP for frontend is 172.30.174.142 and it is on port 8080.  
+In this case, the IP for dancer-example is 172.30.225.109 and it is on port 8080.  
 *Note*: you can also get this information from the web console.
 
 ###Installation: With MySQL
@@ -103,7 +101,9 @@ To add REST and DB connectivity to this sample app, you can up date the applicat
 	#default->to_app;
 	start;
 
-You will then need to rebuild the application.
+It will also be necessary to update your application to talk to your database back-end. The inventory.pm file is configured to use DBI and $ENV in such a way that it will accept environment variables for your connection information that you pass to it. After creating a MySQL database service in your project, you can add the following environment variables to your deploymentConfig to ensure all your dancer-example pods have access to these environment variables. Note: the dancer-mysql.json template creates the DB service and environment variables for you. 
+
+You will then need to rebuild the application.  This is done via either a `oc start-build` command, or through the web console, or a webhook trigger in github initiating a build after the code changes are pushed.
 
 ###License
 This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
