@@ -27,7 +27,7 @@
           {
             "name": "web",
             "port": 8080,
-            "targetPort": 8080
+            "targetPort": "web"
           }
         ],
         "selector": {
@@ -152,6 +152,7 @@
                 "image": "dancer-mysql-example",
                 "ports": [
                   {
+                    "name": "web",
                     "containerPort": 8080
                   }
                 ],
@@ -176,7 +177,13 @@
                     "name": "SECRET_KEY_BASE",
                     "value": "${SECRET_KEY_BASE}"
                   }
-                ]
+                ],
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/_health/live",
+                    "port": 8080
+                  }
+                }
               }
             ]
           }

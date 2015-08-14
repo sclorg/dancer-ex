@@ -27,7 +27,7 @@
           {
             "name": "web",
             "port": 8080,
-            "targetPort": 8080
+            "targetPort": "web"
           }
         ],
         "selector": {
@@ -155,9 +155,16 @@
                 "image": "dancer-example",
                 "ports": [
                   {
+                    "name": "web",
                     "containerPort": 8080
                   }
-                ]
+                ],
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/_health/live",
+                    "port": 8080
+                  }
+                }
               }
             ]
           }

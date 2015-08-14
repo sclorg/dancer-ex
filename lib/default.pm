@@ -11,4 +11,9 @@ get '/' => sub {
     template default => {};
 };
 
+get '/_health/live' => sub {
+
+    template live => {};
+};
+
 true;
