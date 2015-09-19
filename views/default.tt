@@ -317,6 +317,9 @@ oc deploy dancer-mysql-example --latest
                     <li><a href="http://git-scm.com/documentation">Git documentation</a></li>
                   </ul>
 
+                <h2>Request information</h2>
+                <p>Page view count:
+                [% data %]
           </section>
         </div>
 
