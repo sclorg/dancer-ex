@@ -319,7 +319,8 @@ oc deploy dancer-mysql-example --latest
 
                 <h2>Request information</h2>
                 <p>Page view count:
-                [% data %]
+                <span class="code" id="count-value">[% data %]</span>
+                </p>
           </section>
         </div>
 
