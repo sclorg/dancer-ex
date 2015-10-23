@@ -1,8 +1,9 @@
 requires "Dancer2" => "0.160001";
 requires "Dancer2::Plugin::Database" => "0";
 requires "DBD::mysql" => "4.031";
+requires "YAML::XS" => "0";
+requires "Template" => "0";
 
-recommends "YAML"             => "0";
 recommends "URL::Encode::XS"  => "0";
 recommends "CGI::Deurl::XS"   => "0";
 recommends "HTTP::Parser::XS" => "0";
