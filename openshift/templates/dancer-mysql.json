@@ -4,7 +4,7 @@
   "metadata": {
     "name": "dancer-mysql-example",
     "annotations": {
-      "description": "An example Dancer application with a MySQL database",
+      "description": "An example Blah-hu application with a MySQL database",
       "tags": "instant-app,perl,dancer,mysql",
       "iconClass": "icon-perl"
     }
