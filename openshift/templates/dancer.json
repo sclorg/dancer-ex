@@ -5,7 +5,7 @@
     "name": "dancer-example",
     "annotations": {
       "description": "An example Dancer application with no database",
-      "tags": "instant-app,perl,dancer",
+      "tags": "quickstart,perl,dancer",
       "iconClass": "icon-perl"
     }
   },
