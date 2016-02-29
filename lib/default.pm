@@ -45,4 +45,14 @@ get '/' => sub {
     template default => {hasDB => $hasDB, data => $data[0]};
 };
 
+get '/health' => sub {
+  my $dbh = get_connection();
+
+  if (not $dbh->ping) {
+    status 'error';
+    return "ERROR: Database did not respond to ping.";
+  }
+  return "SUCCESS: Database connection appears healthy.";
+};
+
 true;
