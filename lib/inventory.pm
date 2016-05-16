@@ -76,4 +76,14 @@ post '/' => sub {
    template index => {data => $data, timestamp => $timestamp};
 };
 
+get '/health' => sub {
+  my $dbh = get_connection();
+
+  if (not $dbh->ping) {
+    status 'error';
+    return "ERROR: Database did not respond to ping.";
+  }
+  return "SUCCESS: Database connection appears healthy.";
+};
+
 true;
