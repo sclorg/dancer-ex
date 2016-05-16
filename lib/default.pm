@@ -46,9 +46,15 @@ get '/' => sub {
 };
 
 get '/health' => sub {
-  my $dbh = get_connection();
+  my $dbh  = get_connection();
+  my $ping = $dbh->ping
 
-  if (not $dbh->ping) {
+  if ($ping and $ping == 0) {
+    # This is the 'true but zero' case, meaning that ping() is not implemented for this DB type.
+    # See: http://search.cpan.org/~timb/DBI-1.636/DBI.pm#ping
+    return "WARNING: Database health uncertain; this database type does not support ping checks.";
+  }
+  elsif (not $ping) {
     status 'error';
     return "ERROR: Database did not respond to ping.";
   }
