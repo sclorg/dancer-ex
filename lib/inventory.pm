@@ -78,7 +78,7 @@ post '/' => sub {
 
 get '/health' => sub {
   my $dbh  = get_connection();
-  my $ping = $dbh->ping
+  my $ping = $dbh->ping();
 
   if ($ping and $ping == 0) {
     # This is the 'true but zero' case, meaning that ping() is not implemented for this DB type.
