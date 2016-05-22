@@ -78,12 +78,15 @@ In this case, the IP for dancer-example is 172.30.225.109 and it is on port 8080
 ###Adding Webhooks and Making Code Changes
 Since OpenShift V3 does not provide a git repository out of the box, you can configure your github repository to make a webhook call whenever you push your code.
 
-1. From the console navigate to your project  
-2. Click on Browse > Builds  
-3. From the view for your Build click on the link to display your GitHub webhook and copy the url.  
-4. Navigate to your repository on GitHub and click on repository settings > webhooks  
-5. Paste your copied webhook url provided by OpenShift - Thats it!  
-6. After you save your webhook, if you refresh your settings page you can see the status of the ping that Github sent to OpenShift to verify it can reach the server.  
+1. From the Web Console homepage, navigate to your project
+2. Click on Browse > Builds
+3. Click the link with your BuildConfig name
+4. Click the Configuration tab
+5. Click the "Copy to clipboard" icon to the right of the "GitHub webhook URL" field
+6. Navigate to your repository on GitHub and click on repository settings > webhooks > Add webhook
+7. Paste your webhook URL provided by OpenShift
+8. Leave the defaults for the remaining fields - That's it!
+9. After you save your webhook, if you refresh your settings page you can see the status of the ping that Github sent to OpenShift to verify it can reach the server.  
 
 ###Enabling the Database sample
 To add REST and DB connectivity to this sample app, you can up date the application to launch using the code made available via this repository.  Edit 'bin/app.psgi' to look like the following:
