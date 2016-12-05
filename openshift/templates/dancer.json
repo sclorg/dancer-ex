@@ -83,7 +83,7 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${NAMESPACE}",
-              "name": "perl:5.20"
+              "name": "perl:5.24"
             },
             "env":  [
               {
