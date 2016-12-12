@@ -27,7 +27,7 @@ Development environment can help you debug problems in your application in the s
 The Perl container is set up so that Apache will load .conf files located within the <code>cfg</code> directory of the application's root.  This is useful if you are configuring your application with a database backend and would want to pass through your environment variables to mod_perl with <code>PerlPassEnv</code>.
 
 ###Installation: 
-These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](http://docs.openshift.org/latest/admin_guide/install/first_steps.html).    If you are defining the set of ImageStreams now, remember to pass in the proper cluster-admin credentials and to create the ImageStreams in the 'openshift' namespace.
+These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](https://docs.openshift.org/latest/install_config/imagestreams_templates.html).    If you are defining the set of ImageStreams now, remember to pass in the proper cluster-admin credentials and to create the ImageStreams in the 'openshift' namespace.
 
 1. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
 2. Clone your repository to your development machine and cd to the repository directory
@@ -41,7 +41,7 @@ These steps assume your OpenShift deployment has the default set of ImageStreams
 
 5. Once the build is running, watch your build progress  
 
-		$ oc build-logs dancer-example-1
+		$ oc logs build/dancer-example-1
 
 6. Wait for dancer-example pods to start up (this can take a few minutes):  
 
