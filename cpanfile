@@ -1,6 +1,7 @@
-requires "Dancer2" => "0.160001";
+requires "HTTP::XSCookies" , '< 0.000017';
+requires "Dancer2" => "0";
 requires "Dancer2::Plugin::Database" => "0";
-requires "DBD::mysql" => "4.031";
+requires "DBD::mysql" => "0";
 requires "YAML::XS" => "0";
 requires "Template" => "0";
 
