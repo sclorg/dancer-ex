@@ -21,7 +21,7 @@ Dancer Sample App on OpenShift
 
 This is a quickstart Dancer application for OpenShift v3 that you can use as a starting point to develop your own application and deploy it on an [OpenShift](https://github.com/openshift/origin) cluster.
 
-If you'd like to install it, follow [these directions](https://github.com/openshift/dancer-ex/blob/master/README.md#installation).  
+If you'd like to install it, follow [these directions](https://github.com/sclorg/dancer-ex/blob/master/README.md#installation).  
 
 The steps in this document assume that you have access to an OpenShift deployment that you can deploy applications on.
 
@@ -47,7 +47,7 @@ The Perl container is set up so that Apache will load .conf files located within
 ### Installation: 
 These steps assume your OpenShift deployment has the default set of ImageStreams defined.  Instructions for installing the default ImageStreams are available [here](https://docs.openshift.org/latest/install_config/imagestreams_templates.html).    If you are defining the set of ImageStreams now, remember to pass in the proper cluster-admin credentials and to create the ImageStreams in the 'openshift' namespace.
 
-1. Fork a copy of [dancer-ex](https://github.com/openshift/dancer-ex)
+1. Fork a copy of [dancer-ex](https://github.com/sclorg/dancer-ex)
 2. Clone your repository to your development machine and cd to the repository directory
 3. Add a Perl application from the provided template and specify the source url to be your forked repo  
 
