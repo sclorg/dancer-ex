@@ -105,7 +105,7 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${NAMESPACE}",
-              "name": "perl:5.26"
+              "name": "perl:5.26-ubi8"
             },
             "env":  [
               {
@@ -325,7 +325,7 @@
               "from": {
                 "kind": "ImageStreamTag",
                 "namespace": "${NAMESPACE}",
-                "name": "mysql:5.7"
+                "name": "mysql:8.0-el8"
               }
             }
           },
@@ -404,6 +404,10 @@
                   {
                       "name": "MYSQL_DATABASE",
                       "value": "${DATABASE_NAME}"
+                  },
+                  {
+                      "name": "MYSQL_DEFAULT_AUTHENTICATION_PLUGIN",
+                      "value": "${MYSQL_DEFAULT_AUTHENTICATION_PLUGIN}"
                   }
                 ],
                 "resources": {
@@ -526,6 +530,12 @@
       "displayName": "Custom CPAN Mirror URL",
       "description": "The custom CPAN mirror URL",
       "value": ""
+    },
+    {
+      "name": "MYSQL_DEFAULT_AUTHENTICATION_PLUGIN",
+      "displayName": "MySQL authentication plugin",
+      "description": "The custom MySQL default authentication plugin (default: mysql_native_password), might be changed to caching_sha2_password once PHP client supports it.",
+      "value": "mysql_native_password"
     }
   ]
 }
