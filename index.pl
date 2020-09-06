@@ -9,7 +9,7 @@ set apphandler => 'PSGI';
 set environment => 'production';
 
 my $psgi;
-$psgi = path($ENV{'DOCUMENT_ROOT'}, 'bin', 'app.psgi');
+$psgi = path($ENV{'DOCUMENT_ROOT'}, 'app.psgi');
 die "Unable to read startup script: $psgi" unless -r $psgi;
 
 Plack::Runner->run($psgi);

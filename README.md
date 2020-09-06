@@ -107,13 +107,13 @@ Since OpenShift V3 does not provide a git repository out of the box, you can con
 9. After you save your webhook, if you refresh your settings page you can see the status of the ping that Github sent to OpenShift to verify it can reach the server.  
 
 ### Enabling the Database sample
-To add REST and DB connectivity to this sample app, you can up date the application to launch using the code made available via this repository.  Edit 'bin/app.psgi' to look like the following:
+To add REST and DB connectivity to this sample app, you can up date the application to launch using the code made available via this repository.  Edit 'app.psgi' to look like the following:
 
 	#!/usr/bin/env perl
 	use strict;
 	use warnings;
 	use FindBin;
-	use lib "$FindBin::Bin/../lib";
+	use lib "$FindBin::Bin/lib";
 	use Dancer2;
 	use inventory;
 	#use default;
