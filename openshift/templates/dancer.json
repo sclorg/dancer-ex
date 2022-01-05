@@ -1,6 +1,6 @@
 {
   "kind": "Template",
-  "apiVersion": "v1",
+  "apiVersion": "template.openshift.io/v1",
   "metadata": {
     "name": "dancer-example",
     "annotations": {
@@ -45,7 +45,7 @@
     },
     {
       "kind": "Route",
-      "apiVersion": "v1",
+      "apiVersion": "route.openshift.io/v1",
       "metadata": {
         "name": "${NAME}"
       },
@@ -59,7 +59,7 @@
     },
     {
       "kind": "ImageStream",
-      "apiVersion": "v1",
+      "apiVersion": "image.openshift.io/v1",
       "metadata": {
         "name": "${NAME}",
         "annotations": {
@@ -69,7 +69,7 @@
     },
     {
       "kind": "BuildConfig",
-      "apiVersion": "v1",
+      "apiVersion": "build.openshift.io/v1",
       "metadata": {
         "name": "${NAME}",
         "annotations": {
@@ -129,7 +129,7 @@
     },
     {
       "kind": "DeploymentConfig",
-      "apiVersion": "v1",
+      "apiVersion": "apps.openshift.io/v1",
       "metadata": {
         "name": "${NAME}",
         "annotations": {
@@ -232,9 +232,9 @@
     {
       "name": "PERL_VERSION",
       "displayName": "Version of Perl Image",
-      "description": "Version of Perl image to be used (5.26-el7, 5.26-ubi8, or latest).",
+      "description": "Version of Perl image to be used (5.30-el7, 5.30-ubi8, or latest).",
       "required": true,
-      "value": "5.26-ubi8"
+      "value": "5.30-ubi8"
     },
     {
       "name": "MEMORY_LIMIT",
