@@ -2,7 +2,7 @@ package default;
 use Dancer2 ':syntax';
 use Template;
 use DBI;
-use DBD::mysql;
+use DBD::MariaDB;
 
 set template => 'template_toolkit';
 set layout => undef;
@@ -12,7 +12,7 @@ sub get_connection{
   my $service_name=uc $ENV{'DATABASE_SERVICE_NAME'};
   my $db_host=$ENV{"${service_name}_SERVICE_HOST"};
   my $db_port=$ENV{"${service_name}_SERVICE_PORT"};
-  my $dbh=DBI->connect("DBI:mysql:database=$ENV{'MYSQL_DATABASE'};host=$db_host;port=$db_port",$ENV{'MYSQL_USER'},$ENV{'MYSQL_PASSWORD'}) or return 0;
+  my $dbh=DBI->connect("DBI:MariaDB:database=$ENV{'MYSQL_DATABASE'};host=$db_host;port=$db_port",$ENV{'MYSQL_USER'},$ENV{'MYSQL_PASSWORD'}) or return 0;
   return $dbh;
 }
 
