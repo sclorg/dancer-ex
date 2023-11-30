@@ -147,12 +147,13 @@
         "name": "${NAME}",
         "annotations": {
           "description": "Defines how to deploy the application server",
-          "template.alpha.openshift.io/wait-for-ready": "true"
+          "template.alpha.openshift.io/wait-for-ready": "true",
+          "image.openshift.io/triggers": "[{\"from\":{\"kind\":\"ImageStreamTag\",\"name\":\"${NAME}:latest\"},\"fieldPath\": \"spec.template.spec.containers[0].image\"}]"
         }
       },
       "spec": {
         "strategy": {
-          "type": "RollingUpdate"
+          "type": "Recreate"
         },
         "replicas": 1,
         "selector": {
@@ -277,7 +278,7 @@
       },
       "spec": {
         "strategy": {
-          "type": "RollingUpdate"
+          "type": "Recreate"
         },
         "replicas": 1,
         "selector": {
