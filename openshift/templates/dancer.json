@@ -140,7 +140,7 @@
       },
       "spec": {
         "strategy": {
-          "type": "Rolling"
+          "type": "RollingUpdate"
         },
         "replicas": 1,
         "selector": {
