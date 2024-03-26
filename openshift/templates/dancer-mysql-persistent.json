@@ -292,7 +292,8 @@
         "name": "${DATABASE_SERVICE_NAME}",
         "annotations": {
           "description": "Defines how to deploy the database",
-          "template.alpha.openshift.io/wait-for-ready": "true"
+          "template.alpha.openshift.io/wait-for-ready": "true",
+          "image.openshift.io/triggers": "[{\"from\":{\"kind\":\"ImageStreamTag\",\"name\":\"mysql:${MYSQL_VERSION}\"},\"fieldPath\": \"spec.template.spec.containers[0].image\"}]"
         }
       },
       "spec": {
@@ -411,6 +412,13 @@
       "description": "Version of Perl image to be used (5.30-el7, 5.30-ubi8, or latest).",
       "required": true,
       "value": "5.30-ubi8"
+    },
+    {
+      "name": "MYSQL_VERSION",
+      "displayName": "Version of MySQL Image",
+      "description": "Version of MySQL image to be used (8.0-el8, 8.0-el9, or latest).",
+      "value": "8.0-el8",
+      "required": true
     },
     {
       "name": "MEMORY_LIMIT",
