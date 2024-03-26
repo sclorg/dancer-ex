@@ -23,6 +23,23 @@ class TestDancerAppExTemplate:
     def teardown_method(self):
         self.oc_api.delete_project()
 
+
+    def test_local_template_inside_cluster(self):
+        expected_output = "Welcome to your Dancer application"
+        template_json = "../openshift/templates/dancer.json"
+        assert self.oc_api.deploy_template(
+            template=template_json, name_in_template="dancer-example", expected_output=expected_output,
+            openshift_args=[
+                "SOURCE_REPOSITORY_REF=master",
+                f"PERL_VERSION={VERSION}",
+                "NAME=dancer-example"
+            ]
+        )
+        assert self.oc_api.template_deployed(name_in_template="dancer-example")
+        assert self.oc_api.check_response_inside_cluster(
+            name_in_template="dancer-example", expected_output=expected_output
+        )
+
     def test_template_inside_cluster(self):
         expected_output = "Welcome to your Dancer application"
         template_json = self.oc_api.get_raw_url_for_json(
