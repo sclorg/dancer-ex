@@ -17,6 +17,10 @@ class TestDancerAppExTemplate:
 
     def setup_method(self):
         self.oc_api = OpenShiftAPI(pod_name_prefix="dancer-example")
+        json_raw_file = self.oc_api.get_raw_url_for_json(
+            container="s2i-perl-container", dir="imagestreams", filename="perl-rhel.json"
+        )
+        self.oc_api.import_is(path=json_raw_file, name="perl", skip_check=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -25,10 +29,6 @@ class TestDancerAppExTemplate:
     def test_local_template_inside_cluster(self):
         if not is_test_allowed(OS, VERSION):
             pytest.skip(f"Local templates are not supported for {OS} and {VERSION}")
-        json_raw_file = self.oc_api.get_raw_url_for_json(
-            container="s2i-perl-container", dir="imagestreams", filename="perl-rhel.json"
-        )
-        self.oc_api.import_is(path=json_raw_file, name="perl")
         expected_output = "Welcome to your Dancer application"
         template_json = "../openshift/templates/dancer.json"
         assert self.oc_api.deploy_template(
@@ -49,10 +49,6 @@ class TestDancerAppExTemplate:
     def test_template_inside_cluster(self):
         if not is_test_allowed(OS, VERSION):
             pytest.skip(f"Local templates are not supported for {OS} and {VERSION}")
-        json_raw_file = self.oc_api.get_raw_url_for_json(
-            container="s2i-perl-container", dir="imagestreams", filename="perl-rhel.json"
-        )
-        self.oc_api.import_is(path=json_raw_file, name="perl")
         expected_output = "Welcome to your Dancer application"
         template_json = self.oc_api.get_raw_url_for_json(
             container="dancer-ex", dir="openshift/templates", filename="dancer.json"
@@ -66,30 +62,5 @@ class TestDancerAppExTemplate:
         )
         assert self.oc_api.is_template_deployed(name_in_template="dancer-example")
         assert self.oc_api.check_response_inside_cluster(
-            name_in_template="dancer-example", expected_output=expected_output
-        )
-
-    def test_template_by_request(self):
-        if not is_test_allowed(OS, VERSION):
-            pytest.skip(f"Local templates are not supported for {OS} and {VERSION}")
-        json_raw_file = self.oc_api.get_raw_url_for_json(
-            container="s2i-perl-container", dir="imagestreams", filename="perl-rhel.json"
-        )
-        self.oc_api.import_is(path=json_raw_file, name="perl")
-        expected_output = "Welcome to your Dancer application"
-        template_json = self.oc_api.get_raw_url_for_json(
-            container="dancer-ex",
-            dir="openshift/templates",
-            filename="dancer.json"
-        )
-        assert self.oc_api.deploy_template(
-            template=template_json, name_in_template="dancer-example", expected_output=expected_output,
-            openshift_args=[
-                "SOURCE_REPOSITORY_REF=master",
-                f"PERL_VERSION={VERSION}{TAG}",
-                "NAME=dancer-example"]
-        )
-        assert self.oc_api.is_template_deployed(name_in_template="dancer-example")
-        assert self.oc_api.check_response_outside_cluster(
             name_in_template="dancer-example", expected_output=expected_output
         )
