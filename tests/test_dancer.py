@@ -10,6 +10,8 @@ test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION=os.getenv("SINGLE_VERSION")
 OS=os.getenv("OS")
+PR_NUMBER=os.getenv("PR_NUMBER")
+
 
 TAG = TAGS.get(OS)
 
@@ -36,7 +38,7 @@ class TestDancerAppExTemplate:
             name_in_template="dancer-example",
             expected_output=expected_output,
             openshift_args=[
-                "SOURCE_REPOSITORY_REF=master",
+                f"SOURCE_REPOSITORY_REF=refs/pull/{PR_NUMBER}/head",
                 f"PERL_VERSION={VERSION}{TAG}",
                 "NAME=dancer-example"
             ]
@@ -56,7 +58,7 @@ class TestDancerAppExTemplate:
         assert self.oc_api.deploy_template(
             template=template_json, name_in_template="dancer-example", expected_output=expected_output,
             openshift_args=[
-                "SOURCE_REPOSITORY_REF=master",
+                f"SOURCE_REPOSITORY_REF=refs/pull/{PR_NUMBER}/head",
                 f"PERL_VERSION={VERSION}{TAG}",
                 "NAME=dancer-example"]
         )
