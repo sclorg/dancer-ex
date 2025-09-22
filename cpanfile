@@ -1,5 +1,6 @@
-requires "Dancer2" => "0.160001";
+requires "Dancer2" => "0";
 requires "Dancer2::Plugin::Database" => "0";
+requires "Dancer2::Template::Simple" => "0";
 requires 'DBD::MariaDB' => '0';
 requires "YAML::XS" => "0";
 requires "Template" => "0";
