@@ -275,6 +275,7 @@
         "name": "${DATABASE_SERVICE_NAME}",
         "annotations": {
           "description": "Defines how to deploy the database",
+          "image.openshift.io/triggers": "[{\"from\":{\"kind\":\"ImageStreamTag\",\"name\":\"mysql:${MYSQL_VERSION}\",\"namespace\":\"${NAMESPACE}\"},\"fieldPath\": \"spec.template.spec.containers[0].image\"}]",
           "template.alpha.openshift.io/wait-for-ready": "true"
         }
       },
@@ -477,6 +478,13 @@
       "displayName": "Custom CPAN Mirror URL",
       "description": "The custom CPAN mirror URL",
       "value": ""
+    },
+    {
+      "name": "MYSQL_VERSION",
+      "displayName": "Version of MySQL Image",
+      "description": "Version of MySQL image to be used (8.0-el8, 8.0-el9, or latest).",
+      "required": true,
+      "value": "8.0-el8"
     },
     {
       "name": "MYSQL_DEFAULT_AUTHENTICATION_PLUGIN",
